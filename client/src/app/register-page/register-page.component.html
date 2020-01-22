@@ -1,16 +1,58 @@
-<div class="card">
+<form
+  class="card"
+  [formGroup]="form"
+  (ngSubmit)="onSubmit()"
+>
   <div class="card-content">
     <span class="card-title">Создать аккаунт</span>
     <div class="input-field">
-      <input id="email" type="email" required>
+      <input
+        id="email"
+        type="email"
+        formControlName="email"
+        autocomplete="off"
+        [ngClass]="{'invalid': _email.invalid && _email.touched }"
+      >
       <label for="email">Email:</label>
+      <span
+        class="helper-text red-text"
+        *ngIf="_email.invalid && _email.touched"
+      >
+        <span *ngIf="_email.errors['required']">Email не должен быть пустым.</span>
+        <span *ngIf="_email.errors['email']">Введите корректный email адрес.</span>
+      </span>
     </div>
     <div class="input-field">
-      <input id="password" type="password" required>
+      <input
+        id="password"
+        type="password"
+        formControlName="password"
+        autocomplete="off"
+        [ngClass]="{'invalid': _password.invalid && _password.touched }"
+      >
       <label for="password">Пароль:</label>
+      <span
+        class="helper-text red-text"
+        *ngIf="_password.invalid && _password.touched"
+      >
+        <span *ngIf="_password.errors['required']">Пароль не должен быть пустым.</span>
+        <span *ngIf="
+          _password.errors['minlength'] &&
+          _password.errors['minlength']['requiredLength']"
+        >
+          Пароль должен быть больше {{ _password.errors['minlength']['requiredLength']}} символов. {{ _password.errors['minlength']['actualLength'] }}/{{ _password.errors['minlength']['requiredLength']}}
+        </span>
+      </span>
     </div>
   </div>
   <div class="card-action">
-    <button class="modal-action btn waves-effect">Создать</button>
+    <button
+      type="submit"
+      class="modal-action btn waves-effect"
+      [disabled]="form.invalid || form.disabled"
+    >
+      Создать
+    </button>
   </div>
-</div>
+</form>
+
